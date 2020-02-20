@@ -1,9 +1,11 @@
-do i need database to store all this data and connect each model like climate to the location....?
-
-
-permanent home search
+DONE
   list of all municipalities in usa (can ignore certain states that are too far)
     https://gist.githubusercontent.com/Lwdthe1/81818d30d23f012628aac1cdf672627d/raw/45dc8bee7b4fc349ec87931100e0f258bb59f8ea/usaCities.js
+
+
+
+TODO
+permanent home search
   schools
     https://www.greatschools.org/api/request-api-key
   population
