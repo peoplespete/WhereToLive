@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_23_033640) do
+ActiveRecord::Schema.define(version: 2020_02_24_222653) do
 
   create_table "places", force: :cascade do |t|
     t.string "name"
@@ -20,6 +20,9 @@ ActiveRecord::Schema.define(version: 2020_02_23_033640) do
     t.integer "walk_score"
     t.decimal "latitude"
     t.decimal "longitude"
+    t.decimal "precipitation"
+    t.integer "temperature_min"
+    t.integer "temperature_max"
   end
 
 end

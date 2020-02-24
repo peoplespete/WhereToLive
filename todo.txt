@@ -10,15 +10,14 @@ DONE
     end.compact
     puts msgs
   only make requests for places in certain states....make that a default scope on places
-
-IN PROGRESS
-
-START PULLING IN WALKABILITY ONCE EACH PLACE HAS LAT AND LON
-
+  all places have latitude and longitude
   walkability
     https://www.walkscore.com/professional/api.php
     MAX 5,000 calls per day.
+  climate
+    pulls it from https://www.timeanddate.com/weather/usa/#{capital}/climate with pasted local files
 
+IN PROGRESS
   schools
     https://www.greatschools.org/api/request-api-key
     MAX 3000 calls per day
@@ -34,9 +33,7 @@ permanent home search
     https://www.numbeo.com/common/api.jsp (costs money)
     https://www.bls.gov/data/#prices
     https://catalog.data.gov/dataset/consumer-price-indexes-data-pub
-  weather
-    https://openweathermap.org/price
-    https://www.ncdc.noaa.gov/cdo-web/
+
   distance from winston salem
   distance from urban center
     https://business.mapquest.com/products/routing-directions-api

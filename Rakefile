@@ -27,9 +27,7 @@ task :add_latitude_and_longitude => :environment do
 
       place.update(latitude: latitude, longitude: longitude)
       puts "#{place.name}, #{place.state}: #{latitude}, #{longitude}"
-      # sleep 5
     rescue
-      # sleep 30
     end
   end
 end
@@ -57,6 +55,28 @@ task :add_walkability => :environment do
       puts "#{place.name}, #{place.state}: #{walk_score}"
     rescue
     end
-    # binding.pry
+  end
+end
+
+desc "Pulls in climate data"
+task :add_climate => :environment do
+  Place::CAPITALS.each do |state, capital|
+    next unless state.to_s.in?(Place::STATES)
+    puts "#{capital}, #{state}"
+    # Launchy.open("https://www.timeanddate.com/weather/usa/#{capital}/climate".downcase)
+    data = File.read("climate_data/#{capital.downcase}.txt").split("\n")
+    temperatures = []
+    precipitations = []
+    data.each_with_index do |line, i|
+      if i % 3 == 1
+        temperatures.push(line[0..1].to_i)
+        temperatures.push(line[2..3].to_i)
+      elsif i % 3 == 2
+        precipitations.push(line.to_f)
+      end
+    end
+
+    precipitation = precipitations.inject{ |sum, el| sum + el }.to_f / precipitations.size
+    Place.where(state: state.to_s).update_all(precipitation: precipitation, temperature_min: temperatures.min, temperature_max: temperatures.max)
   end
 end
