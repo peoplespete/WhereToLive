@@ -10,13 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_20_220503) do
+ActiveRecord::Schema.define(version: 2020_02_23_033640) do
 
   create_table "places", force: :cascade do |t|
     t.string "name"
     t.string "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "walk_score"
+    t.decimal "latitude"
+    t.decimal "longitude"
   end
 
 end

@@ -1,15 +1,32 @@
 DONE
   list of all municipalities in usa (can ignore certain states that are too far)
     https://gist.githubusercontent.com/Lwdthe1/81818d30d23f012628aac1cdf672627d/raw/45dc8bee7b4fc349ec87931100e0f258bb59f8ea/usaCities.js
+  eliminate duplicates
+    msgs = Place.all.map do |place|
+      if Place.where(name: place.name, state: place.state).count > 1
+        place.destroy
+        "destroying #{place.name}, #{place.state}"
+      end
+    end.compact
+    puts msgs
+  only make requests for places in certain states....make that a default scope on places
 
+IN PROGRESS
 
+START PULLING IN WALKABILITY ONCE EACH PLACE HAS LAT AND LON
+
+  walkability
+    https://www.walkscore.com/professional/api.php
+    MAX 5,000 calls per day.
+
+  schools
+    https://www.greatschools.org/api/request-api-key
+    MAX 3000 calls per day
+    requested api key
 
 TODO
 permanent home search
-  schools
-    https://www.greatschools.org/api/request-api-key
   population
-    https://opendata.stackexchange.com/questions/7/u-s-city-and-county-web-data-api
     https://www.census.gov/data/developers/data-sets/decennial-census.html
   home prices
     https://www.zillow.com/howto/api/APIOverview.htm
@@ -21,8 +38,10 @@ permanent home search
     https://openweathermap.org/price
     https://www.ncdc.noaa.gov/cdo-web/
   distance from winston salem
+  distance from urban center
     https://business.mapquest.com/products/routing-directions-api
     https://cloud.google.com/maps-platform/pricing
-  walkability
-    https://www.walkscore.com/professional/api.php
   special features
+
+Bugs
+  MY LIST DOESN"T INCLUDE Crested Butte and Couer d'Alene hmmm..too small???
