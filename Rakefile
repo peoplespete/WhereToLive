@@ -16,17 +16,18 @@ task :load_places => :environment do
   end
 end
 
-desc "Pulls in latitude and longitude"
-task :add_latitude_and_longitude => :environment do
+desc "Pulls in geocoded information"
+task :add_geocoded_info => :environment do
   Place.all.each do |place|
-    next if place.latitude && place.longitude
+    next if place.latitude && place.longitude && place.county && place.postcode
     begin
       result = Geocoder.search("#{place.name}, #{place.state}").first.data
       latitude = result['lat'].to_f
       longitude = result['lon'].to_f
-
-      place.update(latitude: latitude, longitude: longitude)
-      puts "#{place.name}, #{place.state}: #{latitude}, #{longitude}"
+      county = result['address']['county']
+      postcode = result['address']['postcode']
+      place.update(latitude: latitude, longitude: longitude, county: county, postcode: postcode)
+      puts "#{place.name}, #{place.state}: #{latitude}, #{longitude}, #{county}, #{postcode}"
     rescue
     end
   end
@@ -80,3 +81,49 @@ task :add_climate => :environment do
     Place.where(state: state.to_s).update_all(precipitation: precipitation, temperature_min: temperatures.min, temperature_max: temperatures.max)
   end
 end
+
+
+desc "Pulls in distance to places"
+task :add_distance_to => :environment do
+  gmaps = GoogleMapsService::Client.new(key: 'AIzaSyC-ZvSc_RC37PGwpvRtbPiGn8-mP0E35rc')
+
+  Place.all.each do |place|
+    ['Winston-Salem, NC, USA', 'Philadelphia, PA, USA'].each do |destination|
+      destination_column = destination[/winston/i] ? 'hours_to_winston' : 'hours_to_philly'
+      next if place.send(destination_column).present?
+      begin
+        routes = gmaps.directions(
+          "#{place.name}, #{place.state}, USA",
+          destination,
+          mode: 'driving',
+          alternatives: false)
+        hours_to = routes.first[:legs].first[:duration][:value]/(60*60).to_f
+        place.update(destination_column => hours_to)
+        puts "#{place.name}, #{place.state}: #{hours_to.round(2)} to #{destination[/.+,/][0..-2]}"
+      rescue
+      end
+    end
+  end
+end
+
+
+desc "Pulls in population"
+task :add_population => :environment do
+  binding.pry
+  Place.all.each do |place|
+      # next if place.send(destination_column).present?
+      # begin
+      #   routes = gmaps.directions(
+      #     "#{place.name}, #{place.state}, USA",
+      #     destination,
+      #     mode: 'driving',
+      #     alternatives: false)
+      #   hours_to = routes.first[:legs].first[:duration][:value]/(60*60).to_f
+      #   place.update(destination_column => hours_to)
+      #   puts "#{place.name}, #{place.state}: #{hours_to.round(2)} to #{destination[/.+,/][0..-2]}"
+      # rescue
+      # end
+  end
+end
+
+

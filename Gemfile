@@ -6,6 +6,7 @@ ruby '2.6.3'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'coffee-rails', '~> 4.2'
 gem 'geocoder'
+gem 'google_maps_service', '~> 0.4.2'
 gem 'httparty'
 gem 'jbuilder', '~> 2.5'
 gem 'launchy'

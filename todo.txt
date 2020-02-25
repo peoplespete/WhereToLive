@@ -16,8 +16,17 @@ DONE
     MAX 5,000 calls per day.
   climate
     pulls it from https://www.timeanddate.com/weather/usa/#{capital}/climate with pasted local files
+  distance from winston salem/philly
+    uses google_maps_service gem and google maps api
+    https://console.developers.google.com/apis/dashboard?project=digital-detanger-dashboard
+
 
 IN PROGRESS
+
+  FINISH
+  rake add_geocoded_info
+
+
   schools
     https://www.greatschools.org/api/request-api-key
     MAX 3000 calls per day
@@ -27,6 +36,7 @@ TODO
 permanent home search
   population
     https://www.census.gov/data/developers/data-sets/decennial-census.html
+  distance from urban center
   home prices
     https://www.zillow.com/howto/api/APIOverview.htm
   cost of living
@@ -34,10 +44,6 @@ permanent home search
     https://www.bls.gov/data/#prices
     https://catalog.data.gov/dataset/consumer-price-indexes-data-pub
 
-  distance from winston salem
-  distance from urban center
-    https://business.mapquest.com/products/routing-directions-api
-    https://cloud.google.com/maps-platform/pricing
   special features
 
 Bugs

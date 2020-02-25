@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_24_222653) do
+ActiveRecord::Schema.define(version: 2020_02_25_165133) do
 
   create_table "places", force: :cascade do |t|
     t.string "name"
@@ -23,6 +23,10 @@ ActiveRecord::Schema.define(version: 2020_02_24_222653) do
     t.decimal "precipitation"
     t.integer "temperature_min"
     t.integer "temperature_max"
+    t.decimal "hours_to_winston"
+    t.decimal "hours_to_philly"
+    t.string "county"
+    t.string "postcode"
   end
 
 end
