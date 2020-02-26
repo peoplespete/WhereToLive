@@ -109,20 +109,28 @@ end
 
 desc "Pulls in population"
 task :add_population => :environment do
-  binding.pry
+  agent = Mechanize.new
   Place.all.each do |place|
-      # next if place.send(destination_column).present?
-      # begin
-      #   routes = gmaps.directions(
-      #     "#{place.name}, #{place.state}, USA",
-      #     destination,
-      #     mode: 'driving',
-      #     alternatives: false)
-      #   hours_to = routes.first[:legs].first[:duration][:value]/(60*60).to_f
-      #   place.update(destination_column => hours_to)
-      #   puts "#{place.name}, #{place.state}: #{hours_to.round(2)} to #{destination[/.+,/][0..-2]}"
-      # rescue
-      # end
+    next if place.population.present? && place.population_density.present?
+
+    begin
+      county = place.county
+      county+= ' County' unless county[/county/i]
+      county.gsub!(' ','-')
+      url = "https://population.us/county/#{place.state_code.downcase}/#{county.downcase}/"
+      page = agent.get(url)
+      # Launchy.open(url)
+      population = page.search(".divwidth b").first.children.first.text.gsub(',','').to_i
+      population_density = page.search(".divwidth b")[2].children.first.text.gsub(',','')[/.+p\/mi/][/\d+.\d+/].to_i
+
+      population = nil if population == 0
+      population_density = nil if population_density == 0
+
+      place.update(population: population, population_density: population_density)
+      puts "#{place.name}, #{place.state_code}, #{place.county}: #{population}, #{population_density}"
+    rescue
+      puts "Error with #{place.name}, #{place.state_code}, #{place.county}"
+    end
   end
 end
 

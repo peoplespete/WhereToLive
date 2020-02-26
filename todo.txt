@@ -19,12 +19,15 @@ DONE
   distance from winston salem/philly
     uses google_maps_service gem and google maps api
     https://console.developers.google.com/apis/dashboard?project=digital-detanger-dashboard
+  population
+    used mechanize gem with
+    url = "https://population.us/county/#{place.state_code.downcase}/#{county.downcase}/"
+
 
 
 IN PROGRESS
 
-  FINISH
-  rake add_geocoded_info
+
 
 
   schools
@@ -34,9 +37,6 @@ IN PROGRESS
 
 TODO
 permanent home search
-  population
-    https://www.census.gov/data/developers/data-sets/decennial-census.html
-  distance from urban center
   home prices
     https://www.zillow.com/howto/api/APIOverview.htm
   cost of living
