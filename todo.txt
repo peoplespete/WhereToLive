@@ -28,18 +28,23 @@ DONE
     https://www.zillow.com/howto/api/APIOverview.htm
     my ZWSID
     Rails.application.credentials.zillow_key
-
-
-
-IN PROGRESS
   schools
     https://www.greatschools.org/api/request-api-key
     MAX 3000 calls per day
     requested api key
     Rails.application.credentials.great_schools_key
+  add ransack gem to allow index page for places with search
+  add links to greatschools
+    https://www.greatschools.org/north-carolina/wilmington/schools/?st%5B%5D=public_charter&st%5B%5D=public&st%5B%5D=charter
+  add links to zillow
+    https://www.zillow.com/winston-salem-nc/houses/
+  add links to google maps
+    https://www.google.com/maps?hl=en&q=winston+salem+nc
 
+IN PROGRESS
 
 TODO
+
   cost of living (leave off?)
     https://www.numbeo.com/common/api.jsp (costs money)
     https://www.bls.gov/data/#prices

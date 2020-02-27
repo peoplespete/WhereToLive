@@ -1,0 +1,18 @@
+input {
+  font-weight: bold;
+  margin: 3px 15px;
+}
+
+input[type=submit]{
+  margin-left: 3px;
+}
+
+input::placeholder {
+  color: light-gray;
+  font-weight: normal;
+  font-size: .7em;
+}
+
+form.place_search {
+  margin-left: 20px;
+}

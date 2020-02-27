@@ -1,0 +1,88 @@
+.container
+  .row
+    .cols-12
+      h3 Where to Live
+      hr
+      = search_form_for @q do |f|
+        .row
+          .cols-3
+            = f.label :name_i_cont, 'Name'
+            = f.search_field :name_i_cont, placeholder: 'Winston-Salem'
+
+          .cols-3
+            = f.label :state_i_cont, 'State'
+            = f.search_field :state_i_cont, placeholder: 'North Carolina'
+
+          .cols-3
+            = f.label :home_price_lt
+            = f.search_field :home_price_lt, placeholder: "#{@home_price[:min]}-#{@home_price[:max]}"
+
+          .cols-3
+            = f.label :home_price_gt
+            = f.search_field :home_price_gt, placeholder: "#{@home_price[:min]}-#{@home_price[:max]}"
+
+          .cols-3
+            = f.label :school_rating_gt
+            = f.search_field :school_rating_gt, placeholder: '0-10'
+
+          .cols-3
+            = f.label :walk_score_gt
+            = f.search_field :walk_score_gt, placeholder: '0-100'
+
+          .cols-3
+            = f.label :hours_to_winston_lt
+            = f.search_field :hours_to_winston_lt, placeholder: '4'
+
+          .cols-3
+            = f.label :hours_to_philly_lt
+            = f.search_field :hours_to_philly_lt, placeholder: '4'
+
+          .cols-3
+            = f.label :population_density_lt
+            = f.search_field :population_density_lt, placeholder: "#{@population_density[:min]}-#{@population_density[:max]}"
+
+          .cols-3
+            = f.label :population_density_gt
+            = f.search_field :population_density_gt, placeholder: "#{@population_density[:min]}-#{@population_density[:max]}"
+
+          .cols-3
+            = f.label :temperature_min_gt
+            = f.search_field :temperature_min_gt, placeholder: 'Fahrenheit'
+
+          .cols-3
+            = f.label :temperature_max_lt
+            = f.search_field :temperature_max_lt, placeholder: 'Fahrenheit'
+
+          = f.submit 'Search', class: 'btn btn-info'
+
+      hr
+
+      table.table.table-striped.schedule
+        thead
+          th = sort_link(@q, :name)
+          th = sort_link(@q, :state)
+          th = sort_link(@q, :home_price)
+          th = sort_link(@q, :school_rating)
+          th = sort_link(@q, :walk_score)
+          th = sort_link(@q, :hours_to_winston)
+          th = sort_link(@q, :hours_to_philly)
+          th = sort_link(@q, :population_density)
+          th = sort_link(@q, :temperature_min)
+          th = sort_link(@q, :temperature_max)
+
+        tbody
+          - @places.each do |place|
+            tr
+              td = link_to place.name, "https://www.google.com/maps?hl=en&q=#{place.name} #{place.state}", target: '_blank'
+              td = link_to place.state, "https://www.google.com/maps?hl=en&q=#{place.name} #{place.state}", target: '_blank'
+              td.text-right = link_to number_with_delimiter(place.home_price || 'nil', :delimiter => ','), "https://www.zillow.com/#{place.name.gsub(' ','-')}-#{place.state_code}/houses/", target: '_blank'
+              td.text-right = link_to place.school_rating&.round(1) || 'nil', "https://www.greatschools.org/#{place.state.gsub(' ','-')}/#{place.name.gsub(' ','-')}/schools/?st%5B%5D=public_charter&st%5B%5D=public&st%5B%5D=charter", target: '_blank'
+              td.text-right = place.walk_score
+              td.text-right = place.hours_to_winston&.round(1)
+              td.text-right = place.hours_to_philly&.round(1)
+              td.text-right = number_with_delimiter(place.population_density, :delimiter => ',')
+              td.text-right = place.temperature_min
+              td.text-right = place.temperature_max
+
+
+

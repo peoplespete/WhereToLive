@@ -173,3 +173,24 @@ task :add_home_pricing => :environment do
 end
 
 
+desc "Pulls in school data"
+task :add_schools => :environment do
+  GreatSchools::API.key = Rails.application.credentials.great_schools_key
+
+  Place.all.each do |place|
+    next if place.school_rating.present?
+
+    begin
+      schools = GreatSchools::School.browse(place.state_code, place.name, { school_types: ['public', 'charter'] })
+      ratings = schools.map(&:rating).map(&:to_i).compact
+      school_rating = ratings.inject{ |sum, el| sum + el }.to_f / ratings.size
+
+      puts "Adds #{place.name}, #{place.state}: #{school_rating}"
+      place.update(school_rating: school_rating)
+    rescue
+    end
+  end
+end
+
+
+
