@@ -85,7 +85,7 @@ end
 
 desc "Pulls in distance to places"
 task :add_distance_to => :environment do
-  gmaps = GoogleMapsService::Client.new(key: 'AIzaSyC-ZvSc_RC37PGwpvRtbPiGn8-mP0E35rc')
+  gmaps = GoogleMapsService::Client.new(key: Rails.application.credentials.google_maps_key)
 
   Place.all.each do |place|
     ['Winston-Salem, NC, USA', 'Philadelphia, PA, USA'].each do |destination|

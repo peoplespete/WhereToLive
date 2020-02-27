@@ -27,24 +27,33 @@ DONE
 
 IN PROGRESS
 
+  figure out how to get credentials stored properly!!!! ASAP
 
-
+  home prices
+    https://www.zillow.com/howto/api/APIOverview.htm
+    my ZWSID
+    Rails.application.credentials.zillow_key
 
   schools
     https://www.greatschools.org/api/request-api-key
     MAX 3000 calls per day
     requested api key
+    Rails.application.credentials.great_schools_key
+
 
 TODO
-permanent home search
-  home prices
-    https://www.zillow.com/howto/api/APIOverview.htm
-  cost of living
+  cost of living (leave off?)
     https://www.numbeo.com/common/api.jsp (costs money)
     https://www.bls.gov/data/#prices
     https://catalog.data.gov/dataset/consumer-price-indexes-data-pub
 
-  special features
+  special features?
 
 Bugs
   MY LIST DOESN"T INCLUDE Crested Butte and Couer d'Alene hmmm..too small???
+
+
+NOTES:
+EDITOR="nano" bin/rails credentials:edit
+rails credentials:show
+Rails.application.credentials.x
