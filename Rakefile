@@ -135,3 +135,41 @@ task :add_population => :environment do
 end
 
 
+desc "Pulls in real estate data"
+task :add_home_pricing => :environment do
+  data = CSV.read("zillow_data/sales_by_county.csv")
+  heading_row = data.shift
+  csv_places = []
+  data.each do |row|
+    county = row[1]
+    state = row[2]
+    home_price = row[-6..-1].map(&:to_i).inject{ |sum, el| sum + el }.to_i / 6
+    hsh = {
+      county: county,
+      state: state,
+      home_price: home_price,
+    }
+    csv_places.push(hsh)
+  end
+
+  problem_places = Place.all.select do |place|
+    !csv_places.any?{|csv_place| csv_place[:county] == place.county && csv_place[:state] == place.state}
+  end
+
+  problem_places.each do |place|
+    next unless place.county.present?
+    unless place.county[/county/i]
+      place.update(county: "#{place.county} County")
+    end
+  end
+
+
+  Place.all.each do |place|
+    csv_place = csv_places.detect{ |csv_place| csv_place[:county] == place.county && csv_place[:state] == place.state }
+    next unless csv_place
+    puts "Adds #{place.name}, #{place.state}: #{csv_place[:home_price]}"
+    place.update(home_price: csv_place[:home_price])
+  end
+end
+
+

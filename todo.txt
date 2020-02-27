@@ -22,18 +22,16 @@ DONE
   population
     used mechanize gem with
     url = "https://population.us/county/#{place.state_code.downcase}/#{county.downcase}/"
-
-
-
-IN PROGRESS
-
-  figure out how to get credentials stored properly!!!! ASAP
-
   home prices
+    downloaded something instead in /zillow_data
+    covered 1883 of 2362 (ie missing 479)
     https://www.zillow.com/howto/api/APIOverview.htm
     my ZWSID
     Rails.application.credentials.zillow_key
 
+
+
+IN PROGRESS
   schools
     https://www.greatschools.org/api/request-api-key
     MAX 3000 calls per day

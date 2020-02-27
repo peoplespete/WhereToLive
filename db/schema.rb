@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_26_203641) do
+ActiveRecord::Schema.define(version: 2020_02_27_181549) do
 
   create_table "places", force: :cascade do |t|
     t.string "name"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_203641) do
     t.string "postcode"
     t.integer "population"
     t.integer "population_density"
+    t.integer "home_price"
   end
 
 end
