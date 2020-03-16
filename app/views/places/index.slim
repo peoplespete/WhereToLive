@@ -38,12 +38,12 @@
             = f.search_field :hours_to_philly_lt, placeholder: '4'
 
           .cols-3
-            = f.label :population_density_lt
-            = f.search_field :population_density_lt, placeholder: "#{@population_density[:min]}-#{@population_density[:max]}"
+            = f.label :population_lt
+            = f.search_field :population_lt, placeholder: "#{@population[:min]}-#{@population[:max]}"
 
           .cols-3
-            = f.label :population_density_gt
-            = f.search_field :population_density_gt, placeholder: "#{@population_density[:min]}-#{@population_density[:max]}"
+            = f.label :population_gt
+            = f.search_field :population_gt, placeholder: "#{@population[:min]}-#{@population[:max]}"
 
           .cols-3
             = f.label :temperature_min_gt
@@ -66,7 +66,7 @@
           th = sort_link(@q, :walk_score)
           th = sort_link(@q, :hours_to_winston)
           th = sort_link(@q, :hours_to_philly)
-          th = sort_link(@q, :population_density)
+          th = sort_link(@q, :population)
           th = sort_link(@q, :temperature_min)
           th = sort_link(@q, :temperature_max)
 
@@ -80,7 +80,7 @@
               td.text-right = place.walk_score
               td.text-right = place.hours_to_winston&.round(1)
               td.text-right = place.hours_to_philly&.round(1)
-              td.text-right = number_with_delimiter(place.population_density, :delimiter => ',')
+              td.text-right = number_with_delimiter(place.population, :delimiter => ',')
               td.text-right = place.temperature_min
               td.text-right = place.temperature_max
 

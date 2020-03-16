@@ -2,23 +2,23 @@ class Place < ApplicationRecord
   include PlaceHelper
 
   STATES = [
-    'Connecticut',
+    # 'Connecticut',
     'Delaware',
-    'Florida',
-    'Georgia',
+    # 'Florida',
+    # 'Georgia',
     'Maine',
-    'Maryland',
-    'Massachusetts',
-    'New Hampshire',
-    'New Jersey',
-    'New York',
+    # 'Maryland',
+    # 'Massachusetts',
+    # 'New Hampshire',
+    # 'New Jersey',
+    # 'New York',
     'North Carolina',
-    'Rhode Island',
+    # 'Rhode Island',
     'South Carolina',
-    'Tennessee',
-    'Vermont',
+    # 'Tennessee',
+    # 'Vermont',
     'Virginia',
-    'West Virginia',
+    # 'West Virginia',
   ]
 
   default_scope { where(state: STATES) }

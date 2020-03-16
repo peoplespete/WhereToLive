@@ -8,11 +8,42 @@ Rails.application.load_tasks
 desc "Pulls in 5900+ places"
 task :load_places => :environment do
   raise 'You already have places' unless Place.count == 0
-  file = File.open "us_cities.json"
-  places = JSON.load file
-  places.each do |place|
-    Place.create(name: place['city'], state: place['state'])
-    puts "#{place['city']}, #{place['state']}"
+  agent = Mechanize.new
+
+  Place::STATES.each do |state|
+    puts state.capitalize
+    url = "https://en.wikipedia.org/wiki/List_of_cities_in_#{state.gsub(' ','_')}"
+    page = agent.get(url)
+    # Launchy.open(url)
+    state_index = state == 'Virginia' ? 1 : 0
+    table = page.search("table.wikitable")[state_index]
+    headers = table.search('th').map{|header| header.text.strip }
+    name_index = headers.index(headers.find{|header| header[/name|city/i]}) + 1
+    county_index = headers.index(headers.find{|header| header[/county|origin/i]}) + 1
+    population_index = headers.index(headers.find{|header| header[/population|estimate/i]}) + 1
+    table.search('tr').each_with_index do |row, i|
+      next if i == 0
+      next if i == 1 if state == 'South Carolina'
+      begin
+        name = if state == 'Virginia'
+          row.search("td,th:nth-child(#{name_index})").children.first.attributes['title'].text.split(',').first
+        else
+          row.search("td:nth-child(#{name_index})").children.first.attributes['title'].text.split(',').first
+        end
+        population = row.search("td:nth-child(#{population_index})").children.first.text.gsub(',','').to_i
+        county = row.search("td:nth-child(#{county_index})").text.split('/').first.strip
+        if(state == 'Virginia')
+          county_words = county.split(' ')
+          county = county_words[county_words.index('County') - 1]
+        end
+
+        puts "#{name}, #{state}, #{county}, #{population}"
+        Place.create(name: name, state: state, county: county, population: population)
+      rescue
+        puts "error with #{name}"
+      end
+    end
+    puts '==============================='
   end
 end
 
@@ -24,10 +55,8 @@ task :add_geocoded_info => :environment do
       result = Geocoder.search("#{place.name}, #{place.state}").first.data
       latitude = result['lat'].to_f
       longitude = result['lon'].to_f
-      county = result['address']['county']
-      postcode = result['address']['postcode']
-      place.update(latitude: latitude, longitude: longitude, county: county, postcode: postcode)
-      puts "#{place.name}, #{place.state}: #{latitude}, #{longitude}, #{county}, #{postcode}"
+      place.update(latitude: latitude, longitude: longitude)
+      puts "#{place.name}, #{place.state}: #{latitude}, #{longitude}"
     rescue
     end
   end
@@ -106,35 +135,6 @@ task :add_distance_to => :environment do
   end
 end
 
-
-desc "Pulls in population"
-task :add_population => :environment do
-  agent = Mechanize.new
-  Place.all.each do |place|
-    next if place.population.present? && place.population_density.present?
-
-    begin
-      county = place.county
-      county+= ' County' unless county[/county/i]
-      county.gsub!(' ','-')
-      url = "https://population.us/county/#{place.state_code.downcase}/#{county.downcase}/"
-      page = agent.get(url)
-      # Launchy.open(url)
-      population = page.search(".divwidth b").first.children.first.text.gsub(',','').to_i
-      population_density = page.search(".divwidth b")[2].children.first.text.gsub(',','')[/.+p\/mi/][/\d+.\d+/].to_i
-
-      population = nil if population == 0
-      population_density = nil if population_density == 0
-
-      place.update(population: population, population_density: population_density)
-      puts "#{place.name}, #{place.state_code}, #{place.county}: #{population}, #{population_density}"
-    rescue
-      puts "Error with #{place.name}, #{place.state_code}, #{place.county}"
-    end
-  end
-end
-
-
 desc "Pulls in real estate data"
 task :add_home_pricing => :environment do
   data = CSV.read("zillow_data/sales_by_county.csv")
@@ -176,7 +176,6 @@ end
 desc "Pulls in school data"
 task :add_schools => :environment do
   GreatSchools::API.key = Rails.application.credentials.great_schools_key
-
   Place.all.each do |place|
     next if place.school_rating.present?
 

@@ -1,9 +1,9 @@
 class PlacesController < ApplicationController
 
   def index
-    @population_density = {
-      min: Place.minimum('population_density'),
-      max: Place.maximum('population_density'),
+    @population = {
+      min: Place.minimum('population'),
+      max: Place.maximum('population'),
     }
     @home_price = {
       min: Place.minimum('home_price'),
